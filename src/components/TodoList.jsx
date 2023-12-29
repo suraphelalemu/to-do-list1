@@ -1,26 +1,25 @@
-import React,{useState} from 'react'
-import { BiCheckDouble, BiEdit , BiTrash, BiCheckCircle,BiReset,BiRefresh } from "react-icons/bi";
+import React, {useState} from 'react'
+import { BiCheckDouble, BiEdit , BiTrash, BiCheckCircle,BiReset,BiRefresh } from 'react-icons/bi';
 import './Todolist.css';
 
 function TodoList() {
-const [todos, setTodos] =useState([])
-const [inputvalue, setInputValue] =useState('')
-const [editIndex, setEditIndex] =useState(-1)
-const [indexF, setIndexF] =useState(-1)
+const [todos, setTodos] = useState([])
+const [inputvalue, setInputValue] = useState('')
+const [editIndex, setEditIndex] = useState(-1)
 
 
-const addTodo = () =>{
-    if(inputvalue.trim() !==''){
-        if(editIndex!==-1){
-            const updateTodos =[...todos]
-            updateTodos[editIndex] = {task: inputvalue, completed:updateTodos[editIndex]}
+const addTodo = () => {
+    if (inputvalue.trim() !==''){
+        if (editIndex !==-1) {
+            const updatedTodos = [...todos]
+            updatedTodos[editIndex] = {task: inputvalue, completed:updatedTodos[editIndex].completed}
 
-            setTodos(updateTodos)
+            setTodos(updatedTodos)
             setInputValue('')
             setEditIndex(-1)
-            setIndexF(indexF +1)
+            
         }else{
-            setTodos([...todos, {task: inputvalue ,completed:false}])
+            setTodos([...todos, {task: inputvalue, completed:false}])
             setInputValue('')
 
         }
@@ -28,11 +27,7 @@ const addTodo = () =>{
 }
 
 const startEdit = (index) => {
-    
-    console.log(
-        indexF
-    );
-   setInputValue(todos[0].task)
+   setInputValue(todos[index].task)
    setEditIndex(index)
 }
 
@@ -41,22 +36,23 @@ const cancelEdit = () => {
     setEditIndex(-1)
 }
 const removeTodo = (index) => {
- const updateTodos = todos.filter((_, i)=> i !== index)
-    setTodos(updateTodos)
+ const updatedTodos = todos.filter((_, i)=> i !== index)
+    setTodos(updatedTodos)
 }
 const tooglecompleted = (index)=> {
-    const updateTodos = [...todos]
-    updateTodos[index].completed = !updateTodos[index].completed
+    const updatedTodos = [...todos];
+    updatedTodos[index].completed = !updatedTodos[index].completed;
+    setTodos(updatedTodos);
 }
 
 
-    return(
+return(
  <div className="todo-container">
-            <h1>To-Do List</h1>
-<div className="input-section">
+       <h1>To-Do List</h1>  
+      <div className="input-section">
    <input type="text" value={inputvalue} onChange={(e)=> setInputValue(e.target.value)} 
    placeholder='Enter a new Task'
-   className="input-fields" />
+   className="input-field" />
 
    {editIndex !== -1 ? (
 
@@ -71,13 +67,17 @@ const tooglecompleted = (index)=> {
     </div>
 <ul className="todo-list">
     {todos.map((todo, index) =>(
-        <li key={index} className={todo.completed? 'completed':'{todo.task'}>
+        <li key={index} className={todo.completed? 'completed' : ''}>
+        {todo.task}
 
             <div className="btn-group">
-             <button onClick={startEdit} className="btn-edit"><BiEdit /> </button>
-             <button onCanPlay ={removeTodo} className="btn-remove"><BiTrash /> </button>
-             <button className="btn-done" onClick={() => tooglecompleted(index)}>
-                {todo.completed ? <BiReset /> :<BiCheckCircle />}
+            <button className='btn-edit' onClick={() => startEdit(index)}><BiEdit /></button>
+
+            <button className='btn-remove'onClick={() => removeTodo(index)}><BiTrash /></button>
+
+            
+            <button className='btn-done'onClick={() => tooglecompleted(index)}>
+                {todo.completed ? <BiReset /> : <BiCheckCircle />}
 
                 </button>
             </div>
@@ -92,3 +92,5 @@ const tooglecompleted = (index)=> {
     
 }
 export default TodoList
+
+
